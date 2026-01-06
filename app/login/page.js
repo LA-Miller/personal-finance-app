@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -10,7 +11,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!username || !password) {
@@ -18,8 +19,17 @@ export default function LoginPage() {
             return;
         }
 
-        // TEMPORARY: Simulate login
-        setError("");
+        const result = await signIn("credentials", {
+            username,
+            password,
+            redirect: false,
+        });
+
+        if(result?.error) {
+            setError("Invalid username or password.");
+            return;
+        }
+
         router.push("/dashboard");
     };
 
