@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import SignOutButton from "@/components/SignOutButton"
 import { userHasAccounts } from "@/lib/account";
+import Onboarding from "./Onboarding";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -13,13 +14,19 @@ export default async function DashboardPage() {
     }
 
     if(!hasAccounts) {
-        return <p>test</p>;
+        return (
+            <main>
+                <h1>Dashboard</h1>
+                <Onboarding />
+                <SignOutButton />
+            </main>     
+        )
     }
     return (
         <main>
             <h1>Dashboard</h1>
             <p>Welcome, {session.user?.name}</p>
-            <SignOutButton />
+            
             <pre>{JSON.stringify({ hasAccounts }, null, 2)}</pre>
         </main>
     )
