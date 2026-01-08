@@ -35,8 +35,6 @@ export default function Onboarding() {
 
     return (
           <div>
-      <h2>Let’s set up your first account</h2>
-      <p>Add an account to start tracking your money.</p>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
