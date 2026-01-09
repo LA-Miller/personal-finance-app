@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Onboarding from "@/app/dashboard/Onboarding";
+import Onboarding from "@/components/Onboarding";
 
 export default function AddAccountButton() {
     const [open, setOpen] = useState(false);
