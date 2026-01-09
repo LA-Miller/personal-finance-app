@@ -1,6 +1,6 @@
 import { getToken } from "next-auth/jwt";
 
-export async function middleware(req) {
+export async function proxy(req) {
     const { pathname, search } = req.nextUrl;
 
     const token = await getToken({req});

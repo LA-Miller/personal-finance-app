@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Onboarding() {
+export default function Onboarding( { onDone }) {
     const router = useRouter();
     const [name, setName] = useState("Checking");
     const[type, setType] = useState("checking");
@@ -31,6 +31,8 @@ export default function Onboarding() {
         }
 
         router.refresh();
+
+        onDone?.();
     }
 
     return (
