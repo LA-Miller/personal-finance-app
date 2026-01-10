@@ -21,12 +21,6 @@ export default function AddTransactionButton( {accounts, onDone }) {
         e.preventDefault();
         setError("");
 
-        // if(kind == "expense") {
-        //     console.log(amount);
-        //     setAmount(-Math.abs(amount));
-        //     console.log(amount);
-        // }
-
         const res = await fetch("/api/transactions", {
             method: "POST",
             headers: {"Content-Type": "application/json"},

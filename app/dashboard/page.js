@@ -2,11 +2,11 @@ import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import SignOutButton from "@/components/SignOutButton"
-import { userHasAccounts, getTotalBalanceCents } from "@/lib/account";
-import Onboarding from "../../components/Onboarding";
+import { userHasAccounts, getTotalBalanceCents, getAccountsForUser, getUserTransactions } from "@/lib/account";
 import AddAccountButton from "@/components/AddAccountButton";
 import AddTransactionButton from "@/components/AddTransactionButton";
-import { getAccountsForUser } from "@/lib/account";
+import AddAccount from "@/components/AddAccount";
+import TransactionList from "@/components/TransactionList";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
                         <p className="text-sm text-zinc-600">
                             Add an account to start tracking your money.
                         </p>
-                        <Onboarding />
+                        <AddAccount />
                     </div>
 
                     <div className="pt-4">
@@ -49,6 +49,9 @@ export default async function DashboardPage() {
     });
 
     const accounts = await getAccountsForUser(session.user.id);
+
+    const transactions = await getUserTransactions(session.user.id);
+    console.log("trans:", transactions);
     
     return (
         <main className="min-h-screen bg-zinc-100 px-4 py-8 text-black">
@@ -92,9 +95,7 @@ export default async function DashboardPage() {
                 {/* Transactions placeholder */}
                 <section className="bg-white rounded-xl shadow p-6">
                     <h2 className="text-xl font-medium mb-2">Transactions</h2>
-                    <p className="text-sm text-zinc-500">
-                        Your recent transactions will appear here.
-                    </p>
+                    <TransactionList transactions={transactions}/>
                 </section>
 
             </div>
