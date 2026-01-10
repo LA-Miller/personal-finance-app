@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function TransactionList(transactions) {
     const list = transactions.transactions;
-    console.log("list: ", list);
+    // console.log("list: ", list);
 
     if (list.length === 0) {
         return (

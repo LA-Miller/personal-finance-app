@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Onboarding from "@/components/Onboarding";
+import AddAccount from "./AddAccount";
 
 export default function AddAccountButton() {
     const [open, setOpen] = useState(false);
@@ -16,16 +16,7 @@ export default function AddAccountButton() {
 
     return (
         <div>
-            <div>
-                <p>Add a new account</p>
-                <button
-                    onClick={() => setOpen(false)}
-                >
-                    Cancel
-                </button>
-            </div>
-
-            <Onboarding onDone={() => setOpen(false)} />
+            <AddAccount onDone={() => setOpen(false)} />
         </div>
     )    
 }

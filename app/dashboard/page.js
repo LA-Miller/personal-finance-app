@@ -7,6 +7,7 @@ import AddAccountButton from "@/components/AddAccountButton";
 import AddTransactionButton from "@/components/AddTransactionButton";
 import AddAccount from "@/components/AddAccount";
 import TransactionList from "@/components/TransactionList";
+import EditAccountButton from "@/components/EditAccountButton";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -20,19 +21,14 @@ export default async function DashboardPage() {
         return (
             <main className="min-h-screen bg-zinc-100 flex items-center justify-center px-4 text-black">
                 <div className="w-full max-w-lg bg-white rounded-xl shadow p-6 space-y-4">
-                    <h1 className="text-2xl font-semibold">Dashboard</h1>
-                    <p className="text-zinc-600">
-                        Welcome, <span className="font-medium">{session.user?.name}</span>
-                    </p>
 
-                    <div className="border-t pt-4 space-y-2">
+                    <div className="space-y-2">
                         <h2 className="text-lg font-medium">Let’s set up your first account</h2>
                         <p className="text-sm text-zinc-600">
                             Add an account to start tracking your money.
                         </p>
                         <AddAccount />
                     </div>
-
                     <div className="pt-4">
                         <SignOutButton />
                     </div>
@@ -51,7 +47,7 @@ export default async function DashboardPage() {
     const accounts = await getAccountsForUser(session.user.id);
 
     const transactions = await getUserTransactions(session.user.id);
-    console.log("trans:", transactions);
+    // console.log("trans:", transactions);
     
     return (
         <main className="min-h-screen bg-zinc-100 px-4 py-8 text-black">
@@ -67,6 +63,11 @@ export default async function DashboardPage() {
                     </div>
                     <SignOutButton />
                 </header>
+
+                <section>
+                    <AddAccountButton />
+                    <EditAccountButton accounts={accounts}/>
+                </section>
 
                 {/* Summary cards */}
                 <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -88,16 +89,14 @@ export default async function DashboardPage() {
 
                 {/* Actions */}
                 <section className="flex flex-wrap gap-4">
-                    <AddAccountButton />
                     <AddTransactionButton accounts={accounts} />
                 </section>
 
-                {/* Transactions placeholder */}
+                {/* Transactions */}
                 <section className="bg-white rounded-xl shadow p-6">
                     <h2 className="text-xl font-medium mb-2">Transactions</h2>
                     <TransactionList transactions={transactions}/>
                 </section>
-
             </div>
         </main>
     )
