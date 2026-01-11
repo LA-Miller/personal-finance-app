@@ -9,14 +9,6 @@ export default function EditAccountButton(accounts) {
 
 
     const accountList = accounts.accounts;
-    console.log("Accountssss", accountList);
-
-    // function handleEdit(acc) {
-    //     console.log(acc);
-    //     return (
-    //         <EditAccount account={acc} />
-    //     )
-    // }
 
     if (!open) {
         return (

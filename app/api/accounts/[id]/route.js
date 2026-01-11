@@ -8,7 +8,6 @@ export async function PATCH(req) {
     const{accountId, userId, name, type} = body;
     const allowedTypes = ["checking", "savings", "credit", "cash"];
 
-    console.log("Body: ", body);
 
     if(!session) {
         return Response.json({error: "Unauthorized"}, {status: 401});

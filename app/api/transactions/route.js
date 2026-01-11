@@ -6,22 +6,22 @@ import { getClient } from "@/lib/db";
 export async function POST(req) {
     const session = await getServerSession(authOptions);
     const client = await getClient();
+    const body = await req.json();
+    const{accountID, amount, date, category, merchant, note, kind} = body;
+    let amountCents = Math.round(Number(amount) * 100);
+
+    const categoryArray = ["uncategorized", "groceries", "dining", "gas", "rent", "utilities", "shopping", "subscriptions", "healthcare", "travel", "entertainment", "income", "transfer", "adjustment"];
 
     if(!session) {
         return Response.json({error: "Unauthorized" }, {status: 401});
     }
-
-    const body = await req.json();
-    const{accountID, amount, date, category, merchant, note, kind} = body;
 
     if(!accountID || !amount || !date) {
         return Response.json(
             {error: "Account, amount, and date are required fields."},
             {status: 400}
         );
-    }
-
-    let amountCents = Math.round(Number(amount) * 100);
+    }  
 
     if(Number.isNaN(amountCents)) {
         return Response.json(
@@ -30,10 +30,24 @@ export async function POST(req) {
         );
     }
 
+    if(amountCents === 0) {
+        return Response.json(
+            {error: "Transaction cannot be $0.00"},
+            {status: 400}
+        );
+    }
+
     if(kind == 'expense') {
         amountCents = (-Math.abs(amountCents));
     }
     else(amountCents = Math.abs(amountCents));
+
+    if(!categoryArray.includes(category)) {
+        return Response.json(
+            {error: "Not a valid category."},
+            {status: 400}
+        );
+    }
 
     try {
         await client.query("BEGIN");

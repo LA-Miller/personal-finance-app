@@ -11,11 +11,13 @@ export default function AddTransactionButton( {accounts, onDone }) {
     const [amount, setAmount] = useState("0");
     const [date, setDate] = useState(() => 
         new Date().toISOString().slice(0, 10));
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState("uncategorized");
     const [merchant, setMerchant] = useState("");
     const [note, setNote] = useState("");
     const[kind, setKind] = useState("expense");
     const[error, setError] = useState("");
+
+    const categoryArray = ["uncategorized", "groceries", "dining", "gas", "rent", "utilities", "shopping", "subscriptions", "healthcare", "travel", "entertainment", "income", "transfer", "adjustment"];
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -39,6 +41,16 @@ export default function AddTransactionButton( {accounts, onDone }) {
         if(!res.ok) {
             const data = await res.json().catch(() => ({}));
             setError(data.error || "Failed to add transaction");
+            return;
+        }
+
+        if(!categoryArray.includes(category)) {
+            setError("Not a valid category.");
+            return;
+        }
+
+        if(amount === '0') {
+            setError("Transaction cannot be $0.00.");
             return;
         }
 
@@ -97,10 +109,25 @@ export default function AddTransactionButton( {accounts, onDone }) {
 
         <div>
             <label>Category</label>
-            <input 
+            <select 
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-            />
+            >
+                <option value="uncategorized">Uncategorized</option>
+                <option value="groceries">Groceries</option>
+                <option value="dining">Dining</option>
+                <option value="gas">Gas</option>
+                <option value="rent">Rent</option>
+                <option value="utilities">Utilities</option>
+                <option value="shopping">Shopping</option>
+                <option value="subscriptions">Subscriptions</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="travel">Travel</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="income">Income</option>
+                <option value="transfer">Transfer</option>
+                <option value="adjustment">Adjustment</option>
+            </select>
         </div>
 
         <div>

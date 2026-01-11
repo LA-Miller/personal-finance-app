@@ -2,12 +2,13 @@ import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import SignOutButton from "@/components/SignOutButton"
-import { userHasAccounts, getTotalBalanceCents, getAccountsForUser, getUserTransactions } from "@/lib/account";
+import { userHasAccounts, getTotalBalanceCents, getAccountsForUser, getUserTransactions, getTransactionsByCategory } from "@/lib/account";
 import AddAccountButton from "@/components/AddAccountButton";
 import AddTransactionButton from "@/components/AddTransactionButton";
 import AddAccount from "@/components/AddAccount";
 import TransactionList from "@/components/TransactionList";
 import EditAccountButton from "@/components/EditAccountButton";
+import CategoryCharts from "@/components/CategoryCharts";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -47,14 +48,12 @@ export default async function DashboardPage() {
     const accounts = await getAccountsForUser(session.user.id);
 
     const transactions = await getUserTransactions(session.user.id);
-    console.log("trans:", transactions);
 
     function monthlyIncome() {
         let income = 0;
         for(let i = 0; i < transactions.length; i++) {
             if(transactions[i].amount_cents > 0) {
-                income = income + transactions[i].amount_cents;
-                console.log("income", income);
+                income = income + transactions[i].amount_cents;      
             }
         }
         return (income / 100).toFixed(2);
@@ -76,6 +75,9 @@ export default async function DashboardPage() {
     }
 
     const totalIncome = netIncome();
+
+    const spendingByCategory = await getTransactionsByCategory(session.user.id, '2026-01-01', '2026-01-30');
+    console.log("Teeeehee", spendingByCategory);
     
     return (
         <main className="min-h-screen bg-zinc-100 px-4 py-8 text-black">
@@ -116,7 +118,7 @@ export default async function DashboardPage() {
 
                     <div className="bg-white rounded-xl shadow p-4">
                         <p className="text-sm text-zinc-500">Net Income</p>
-                        <p className={`text-2x1 font-semibold ${totalIncome < 0 ? "text-red-600" : "text-green-600"}`}>{totalIncome.toLocaleString("en-US", {style: "currency", currency: "USD"})}</p>
+                        <p className={`text-2xl font-semibold ${totalIncome < 0 ? "text-red-600" : "text-green-600"}`}>{totalIncome.toLocaleString("en-US", {style: "currency", currency: "USD"})}</p>
                     </div>
                 </section>
 
@@ -129,6 +131,12 @@ export default async function DashboardPage() {
                 <section className="bg-white rounded-xl shadow p-6">
                     <h2 className="text-xl font-medium mb-2">Transactions</h2>
                     <TransactionList transactions={transactions}/>
+                </section>
+
+                {/* Spending by category */}
+                <section>
+                    <h2>Spending by Category</h2>
+                    <CategoryCharts data={spendingByCategory}/>
                 </section>
             </div>
         </main>

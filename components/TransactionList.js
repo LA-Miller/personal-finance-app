@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function TransactionList(transactions) {
     const list = transactions.transactions;
-    // console.log("list: ", list);
 
     if (list.length === 0) {
         return (
@@ -12,7 +12,6 @@ export default function TransactionList(transactions) {
                 <p className="text-sm text-zinc-500">
                     Your recent transactions will appear here.
                 </p>
-
             </div>
         )
     }
