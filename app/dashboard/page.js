@@ -47,7 +47,35 @@ export default async function DashboardPage() {
     const accounts = await getAccountsForUser(session.user.id);
 
     const transactions = await getUserTransactions(session.user.id);
-    // console.log("trans:", transactions);
+    console.log("trans:", transactions);
+
+    function monthlyIncome() {
+        let income = 0;
+        for(let i = 0; i < transactions.length; i++) {
+            if(transactions[i].amount_cents > 0) {
+                income = income + transactions[i].amount_cents;
+                console.log("income", income);
+            }
+        }
+        return (income / 100).toFixed(2);
+    } 
+
+    function monthlySpending() {
+        let spending = 0;
+        for(let i = 0; i < transactions.length; i++) {
+            if(transactions[i].amount_cents < 0) {
+                spending = spending - transactions[i].amount_cents;
+            }
+        }
+        return (spending / 100).toFixed(2);
+    }
+
+    function netIncome() {
+        const net = monthlyIncome() - monthlySpending();
+        return net;
+    }
+
+    const totalIncome = netIncome();
     
     return (
         <main className="min-h-screen bg-zinc-100 px-4 py-8 text-black">
@@ -70,7 +98,7 @@ export default async function DashboardPage() {
                 </section>
 
                 {/* Summary cards */}
-                <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <section className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="bg-white rounded-xl shadow p-4">
                         <p className="text-sm text-zinc-500">Total Balance</p>
                         <p className="text-2xl font-semibold">{totalUSD}</p>
@@ -78,12 +106,17 @@ export default async function DashboardPage() {
 
                     <div className="bg-white rounded-xl shadow p-4">
                         <p className="text-sm text-zinc-500">Monthly Income</p>
-                        <p className="text-2xl font-semibold text-green-600">—</p>
+                        <p className="text-2xl font-semibold text-green-600">${monthlyIncome()}</p>
                     </div>
 
                     <div className="bg-white rounded-xl shadow p-4">
                         <p className="text-sm text-zinc-500">Monthly Spending</p>
-                        <p className="text-2xl font-semibold text-red-600">—</p>
+                        <p className="text-2xl font-semibold text-red-600">${monthlySpending()}</p>
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow p-4">
+                        <p className="text-sm text-zinc-500">Net Income</p>
+                        <p className={`text-2x1 font-semibold ${totalIncome < 0 ? "text-red-600" : "text-green-600"}`}>{totalIncome.toLocaleString("en-US", {style: "currency", currency: "USD"})}</p>
                     </div>
                 </section>
 
