@@ -94,9 +94,11 @@ export default async function DashboardPage() {
                     <SignOutButton />
                 </header>
 
-                <section>
-                    <AddAccountButton />
-                    <EditAccountButton accounts={accounts}/>
+                <section className="mb-6">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <AddAccountButton />
+                        <EditAccountButton accounts={accounts}/>
+                    </div>
                 </section>
 
                 {/* Summary cards */}

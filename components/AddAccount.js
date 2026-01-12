@@ -99,21 +99,22 @@ export default function AddAccount({ onDone }) {
         </div>
 
         {/* Submit */}
-        <button
-          type="submit"
-          className="mt-2 w-full rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-1"
-        >
-          Add account
-        </button>
+           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200">
+                <button
+                    type="button"
+                    onClick={() => onDone()}
+                    className="rounded-md border border-zinc-300 bg-white px-5 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 transition"
+                >
+                    Cancel
+                </button>
 
-        {/* Cancel */}
-        <button
-        type="button"
-        onClick={() => onDone?.() }
-          className="mt-2 w-full rounded-md bg-red-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-1"
-        >
-          Cancel
-        </button>
+                <button
+                    type="submit"
+                    className="rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 transition"
+                >
+                    Add Account
+                </button>
+            </div>
       </form>
     </div>
   );
